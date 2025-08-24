@@ -1,0 +1,27 @@
+.form {
+  margin-bottom: 2rem;
+}
+
+.fieldSet {
+  width: 100%;
+  max-width: max-content;
+}
+
+.submitButton {
+  width: 100%;
+  max-width: max-content;
+}
+
+.formBody {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .formBody {
+    flex-direction: row;
+    align-items: center;
+  }
+}

@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-
-import generateMockAddresses from "../../src/utils/generateMockAddresses";
+import generateMockAddresses from "../../app/(frontend)/utils/generateMockAddresses";
 
 export default async function handle(
   req: NextApiRequest,
@@ -18,7 +17,7 @@ export default async function handle(
     });
   }
 
-  if (postcode.length < 4) {
+  if ((postcode as string).length < 4) {
     return res.status(400).send({
       status: "error",
       // DO NOT MODIFY MSG - used for grading
@@ -26,39 +25,45 @@ export default async function handle(
     });
   }
 
-  /** TODO: Implement the validation logic to ensure input value
-   *  is all digits and non negative
-   */
-  const isStrictlyNumeric = (value: string) => {
-    return true;
+  // ✅ Shared validation function
+  const validateNumericField = (
+    value: string,
+    fieldName: "Postcode" | "Street Number"
+  ): string | null => {
+    if (!/^\d+$/.test(value) || Number(value) < 0) {
+      return `${fieldName} must be all digits and non negative!`;
+    }
+    return null;
   };
 
-  /** TODO: Refactor the code below so there is no duplication of logic for postCode/streetNumber digit checks. */
-  if (!isStrictlyNumeric(postcode as string)) {
-    return res.status(400).send({
-      status: "error",
-      errormessage: "Postcode must be all digits and non negative!",
-    });
+  // ✅ Use the same validator for both fields
+  const postcodeError = validateNumericField(postcode as string, "Postcode");
+  if (postcodeError) {
+    return res
+      .status(400)
+      .send({ status: "error", errormessage: postcodeError });
   }
 
-  if (!isStrictlyNumeric(streetnumber as string)) {
-    return res.status(400).send({
-      status: "error",
-      errormessage: "Street Number must be all digits and non negative!",
-    });
+  const streetError = validateNumericField(
+    streetnumber as string,
+    "Street Number"
+  );
+  if (streetError) {
+    return res.status(400).send({ status: "error", errormessage: streetError });
   }
 
   const mockAddresses = generateMockAddresses(
     postcode as string,
     streetnumber as string
   );
-  if (mockAddresses) {
-    const timeout = (ms: number) => {
-      return new Promise((resolve) => setTimeout(resolve, ms));
-    };
 
-    // delay the response by 500ms - for loading status check
+  if (mockAddresses) {
+    const timeout = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    // simulate latency
     await timeout(500);
+
     return res.status(200).json({
       status: "ok",
       details: mockAddresses,

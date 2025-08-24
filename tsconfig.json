@@ -21,16 +21,16 @@
     "baseUrl": ".",
     "paths": {
       "@/app/*": [
-        "src/app/*"
+        "app/*"
       ],
       "@/types": [
-        "src/types"
+        "app/(frontend)/types"
       ],
       "@/hooks/*": [
-        "src/ui/hooks/*"
+        "app/(frontend)/ui/hooks/*"
       ],
       "@/components/*": [
-        "src/ui/components/*"
+        "app/(frontend)/ui/components/*"
       ],
       "@/pages/*": [
         "pages/*"

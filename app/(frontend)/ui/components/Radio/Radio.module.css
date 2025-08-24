@@ -6,7 +6,6 @@
   display: flex;
   gap: 1rem;
   margin: 1rem 0;
-  max-width: var(--width-input);
   padding: 1em;
   width: 100%;
 }
